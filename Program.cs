@@ -124,9 +124,9 @@ class Hero
         Console.WriteLine($"Name: {Name} Health: {Health} armor: {Armor} damage: {Damage}");
     }
 
-    public void Attack(Hero hero)
+    public void Attack(Hero enemy)
     {
-        hero.TakeDamage(hero.Damage);
+        this.TakeDamage(enemy.GiveDamage());
     }
 
     public virtual void TakeDamage(int damage)
