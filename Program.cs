@@ -17,9 +17,14 @@ class Program
 
 class Arena
 {
-    private List<Hero> _heros = new List<Hero> { new Ork(), new Human(), new Elf(), new Gnom(), new Demon() };
+    private List<Hero> _heros;
     private Hero _leftFighter;
     private Hero _rightFighter;
+
+    public Arena()
+    {
+        _heros = new List<Hero> { new Ork(), new Human(), new Elf(), new Gnom(), new Demon() };
+    }
 
     public void ChouseFigters()
     {
@@ -29,8 +34,9 @@ class Arena
             _heros[i].ShowStats();
         }
 
-        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, _heros.Count - 1)]);
-        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, _heros.Count - 1)]);
+        int quantityPersons = _heros.Count - 1;
+        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)]);
+        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)]);
     }
 
     public void Fight()
@@ -38,8 +44,10 @@ class Arena
         while (_leftFighter.IsAlife && _rightFighter.IsAlife)
         {
             Console.WriteLine();
-            _leftFighter.TakeDamage(_rightFighter.GiveDamage());
-            _rightFighter.TakeDamage(_leftFighter.GiveDamage());
+            //_leftFighter.TakeDamage(_rightFighter.GiveDamage());
+            _leftFighter.Attack(_rightFighter);
+            //_rightFighter.TakeDamage(_leftFighter.GiveDamage());
+            _rightFighter.Attack(_leftFighter);
             _leftFighter.ShowStats();
             _rightFighter.ShowStats();
             Console.WriteLine();
@@ -109,14 +117,16 @@ class Hero
         CountOfAttak = hero.CountOfAttak;
     }
 
-    public bool IsAlife
-    {
-        get { return (Health > 0); }
-    }
+    public bool IsAlife => (Health > 0);
 
     public void ShowStats()
     {
         Console.WriteLine($"Name: {Name} Health: {Health} armor: {Armor} damage: {Damage}");
+    }
+
+    public void Attack(Hero hero)
+    {
+        hero.TakeDamage(hero.Damage);
     }
 
     public virtual void TakeDamage(int damage)
@@ -132,6 +142,8 @@ class Hero
 
 class Ork : Hero
 {
+    private int ratio = 3;
+
     public Ork() : base()
     {
         Name = "Ork";
@@ -142,8 +154,6 @@ class Ork : Hero
 
     public override int GiveDamage()
     {
-        int ratio = 3;
-
         return Damage * Utils.GenerateRandomNumber(1, ratio);
     }
 }
@@ -152,6 +162,7 @@ class Elf : Hero
 {
     private int _enhancedAttackNumber = 3;
     private int _enhancedAttackRatio = 2;
+
     public Elf() : base()
     {
         Name = "Elf";
@@ -207,7 +218,8 @@ class Gnom : Hero
 {
     private int _enhancedOfArmor = 3;
     private int _mana = 100;
-    int ratio = 20;
+    private int _antiMana = 20;
+    private int _ratio = 2;
 
     public Gnom() : base()
     {
@@ -221,15 +233,13 @@ class Gnom : Hero
     {
         Health -= (damage - Armor);
         Armor += _enhancedOfArmor;
-        _mana = -ratio;
+        _mana = -_antiMana;
     }
 
     public override int GiveDamage()
     {
-        int ratio = 2;
-
         if (_mana > 0)
-            return Damage * ratio;
+            return Damage * _ratio;
 
         return Damage;
     }
@@ -237,6 +247,8 @@ class Gnom : Hero
 
 class Demon : Hero
 {
+    private int _ratio = 2;
+
     public Demon() : base()
     {
         Name = "Demon";
@@ -247,8 +259,6 @@ class Demon : Hero
 
     public override void TakeDamage(int damage)
     {
-        int ratio = 2;
-
-        Health -= (damage * Utils.GenerateRandomNumber(0, ratio));
+        Health -= (damage * Utils.GenerateRandomNumber(0, _ratio));
     }
 }
