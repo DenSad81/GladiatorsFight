@@ -35,7 +35,7 @@ class Arena
 
     public void Fight()
     {
-        while (_leftFighter.IsAlife() && _rightFighter.IsAlife())
+        while (_leftFighter.IsAlife && _rightFighter.IsAlife)
         {
             Console.WriteLine();
             _leftFighter.TakeDamage(_rightFighter.GiveDamage());
@@ -48,11 +48,11 @@ class Arena
 
     public void ShowWinner()
     {
-        if (_leftFighter.IsAlife())
+        if (_leftFighter.IsAlife)
             Console.WriteLine("Left fighter is win");
-        else if (_rightFighter.IsAlife())
+        else if (_rightFighter.IsAlife)
             Console.WriteLine("Right fighter is win");
-        else if (_leftFighter.IsAlife() == false && _rightFighter.IsAlife() == false)
+        else if (_leftFighter.IsAlife == false && _rightFighter.IsAlife == false)
             Console.WriteLine("Both dead");
     }
 }
@@ -80,6 +80,12 @@ static class Utils
 
         return digitToOut;
     }
+
+    public static int GenerateRandomNumber(int min, int max)
+    {
+        Random random = new Random();
+        return random.Next(min, max);
+    }
 }
 
 class Hero
@@ -89,7 +95,6 @@ class Hero
     protected int Armor;
     protected int Damage;
     protected int CountOfAttak;
-    protected Random random = new Random();
 
     public Hero()
     {
@@ -104,14 +109,14 @@ class Hero
         CountOfAttak = hero.CountOfAttak;
     }
 
+    public bool IsAlife
+    {
+        get { return (Health > 0); }
+    }
+
     public void ShowStats()
     {
         Console.WriteLine($"Name: {Name} Health: {Health} armor: {Armor} damage: {Damage}");
-    }
-
-    public bool IsAlife()
-    {
-        return (Health > 0);
     }
 
     public virtual void TakeDamage(int damage)
@@ -137,14 +142,16 @@ class Ork : Hero
 
     public override int GiveDamage()
     {
-        return Damage * random.Next(1, 3);
+        int ratio = 3;
+
+        return Damage * Utils.GenerateRandomNumber(1, ratio);
     }
 }
 
 class Elf : Hero
 {
     private int _enhancedAttackNumber = 3;
-    private int _enhancedAttackCoefficient = 2;
+    private int _enhancedAttackRatio = 2;
     public Elf() : base()
     {
         Name = "Elf";
@@ -161,7 +168,7 @@ class Elf : Hero
         if (CountOfAttak >= _enhancedAttackNumber)
         {
             CountOfAttak = 0;
-            return Damage * _enhancedAttackCoefficient;
+            return Damage * _enhancedAttackRatio;
         }
 
         return Damage;
@@ -200,6 +207,7 @@ class Gnom : Hero
 {
     private int _enhancedOfArmor = 3;
     private int _mana = 100;
+    int ratio = 20;
 
     public Gnom() : base()
     {
@@ -213,13 +221,15 @@ class Gnom : Hero
     {
         Health -= (damage - Armor);
         Armor += _enhancedOfArmor;
-        _mana = -20;
+        _mana = -ratio;
     }
 
     public override int GiveDamage()
     {
+        int ratio = 2;
+
         if (_mana > 0)
-            return Damage * 2;
+            return Damage * ratio;
 
         return Damage;
     }
@@ -237,6 +247,8 @@ class Demon : Hero
 
     public override void TakeDamage(int damage)
     {
-        Health -= (damage * random.Next(0, 2));
+        int ratio = 2;
+
+        Health -= (damage * Utils.GenerateRandomNumber(0, ratio));
     }
 }
