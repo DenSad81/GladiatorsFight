@@ -18,8 +18,8 @@ class Program
 class Arena
 {
     private List<Hero> _heros = new List<Hero> { new Ork(), new Human(), new Elf(), new Gnom(), new Demon() };
-    private Fighter _leftFighter;
-    private Fighter _rightFighter;
+    private Hero _leftFighter;
+    private Hero _rightFighter;
 
     public void ChouseFigters()
     {
@@ -29,8 +29,8 @@ class Arena
             _heros[i].ShowStats();
         }
 
-        _leftFighter = new Fighter(_heros[Utils.ReadInt("Choose left warrior: ", 0, _heros.Count - 1)]);
-        _rightFighter = new Fighter(_heros[Utils.ReadInt("Choose right warrior: ", 0, _heros.Count - 1)]);
+        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, _heros.Count - 1)]);
+        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, _heros.Count - 1)]);
     }
 
     public void Fight()
@@ -82,7 +82,7 @@ static class Utils
     }
 }
 
-abstract class Hero
+class Hero
 {
     protected string Name;
     protected int Health;
@@ -122,13 +122,6 @@ abstract class Hero
     public virtual int GiveDamage()
     {
         return Damage;
-    }
-}
-
-class Fighter : Hero
-{
-    public Fighter(Hero hero) : base(hero)
-    {
     }
 }
 
