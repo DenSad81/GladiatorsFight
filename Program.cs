@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 class Program
 {
@@ -41,9 +38,6 @@ class Arena
         int quantityPersons = _heros.Count - 1;
         _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)]);
         _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)]);
-
-        //_leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)].Clone();
-        //_rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)].Clone();
     }
 
     public void Fight()
@@ -51,8 +45,8 @@ class Arena
         while (_leftFighter.IsAlife && _rightFighter.IsAlife)
         {
             Console.WriteLine();
-            _leftFighter.Attack(_rightFighter);
-            _rightFighter.Attack(_leftFighter);
+            _leftFighter.AcceptAttack(_rightFighter);
+            _rightFighter.AcceptAttack(_leftFighter);
             _leftFighter.ShowStats();
             _rightFighter.ShowStats();
             Console.WriteLine();
@@ -136,7 +130,7 @@ class Hero
         Console.WriteLine($"Name: {Name} Health: {Health} armor: {Armor} damage: {Damage}");
     }
 
-    public void Attack(Hero enemy)
+    public void AcceptAttack(Hero enemy)
     {
         this.TakeDamage(enemy.GiveDamage());
     }
@@ -167,8 +161,7 @@ class Ork : Hero
 
 class Elf : Hero
 {
-    private int _enhancedAttackNumber = 3;
-    private int _enhancedAttackRatio = 2;
+    private int _dubleAttackNumber = 3;
     private int _countOfAttak = 0;
 
     public Elf(string name, int health, int armor, int damage) : base(name, health, armor, damage)
@@ -178,10 +171,10 @@ class Elf : Hero
     {
         _countOfAttak++;
 
-        if (_countOfAttak >= _enhancedAttackNumber)
+        if (_countOfAttak >= _dubleAttackNumber)
         {
             _countOfAttak = 0;
-            return Damage * _enhancedAttackRatio;
+            return Damage + base.GiveDamage();
         }
 
         return Damage;
