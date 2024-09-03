@@ -38,7 +38,7 @@ class Arena
         int quantityPersonsWithoutOne = _heros.Count - 1;
         _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)].Clone();
         _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)].Clone();
-   }
+    }
 
     public void Fight()
     {
@@ -132,10 +132,13 @@ class Hero
 
 class Ork : Hero
 {
-    private int _ratio = 3;
+    private int _ratio;
 
-    public Ork(string name, int health, int armor, int damage) : base(name, health, armor, damage)
-    { }
+    public Ork(string name, int health, int armor, int damage, int ratio = 3)
+        : base(name, health, armor, damage)
+    {
+        _ratio = ratio;
+    }
 
     public override Hero Clone()
     {
@@ -150,11 +153,15 @@ class Ork : Hero
 
 class Elf : Hero
 {
-    private int _dubleAttackNumber = 3;
-    private int _countOfAttak = 0;
+    private int _dubleAttackNumber;
+    private int _countOfAttak;
 
-    public Elf(string name, int health, int armor, int damage) : base(name, health, armor, damage)
-    { }
+    public Elf(string name, int health, int armor, int damage, int dubleAttackNumber = 3, int countOfAttak = 0)
+        : base(name, health, armor, damage)
+    {
+        _dubleAttackNumber = dubleAttackNumber;
+        _countOfAttak = countOfAttak;
+    }
 
     public override Hero Clone()
     {
@@ -181,8 +188,13 @@ class Human : Hero
     private int _angryMaxQuantity = 5;
     private int _remedy = 30;
 
-    public Human(string name, int health, int armor, int damage) : base(name, health, armor, damage)
-    { }
+    public Human(string name, int health, int armor, int damage, int angry = 0, int angryMaxQuantity = 5, int remedy = 30)
+        : base(name, health, armor, damage)
+    {
+        _angry = angry;
+        _angryMaxQuantity = angryMaxQuantity;
+        _remedy = remedy;
+    }
 
     public override void TakeDamage(int damage)
     {
@@ -205,8 +217,14 @@ class Gnom : Hero
     private int _antiMana = 20;
     private int _ratio = 2;
 
-    public Gnom(string name, int health, int armor, int damage) : base(name, health, armor, damage)
-    { }
+    public Gnom(string name, int health, int armor, int damage, int enhancedOfArmor = 3, int mana = 100, int antiMana = 20, int ratio = 2)
+        : base(name, health, armor, damage)
+    {
+        _enhancedOfArmor = enhancedOfArmor;
+        _mana = mana;
+        _antiMana = antiMana;
+        _ratio = ratio;
+    }
 
     public override Hero Clone()
     {
@@ -231,10 +249,13 @@ class Gnom : Hero
 
 class Demon : Hero
 {
-    private int _ratio = 2;
+    private int _ratio;
 
-    public Demon(string name, int health, int armor, int damage) : base(name, health, armor, damage)
-    { }
+    public Demon(string name, int health, int armor, int damage, int ratio = 2)
+        : base(name, health, armor, damage)
+    {
+        _ratio = ratio;
+    }
 
     public override Hero Clone()
     {
