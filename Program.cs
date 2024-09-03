@@ -6,7 +6,7 @@ class Program
     static void Main(string[] args)
     {
         Arena arena = new Arena();
-        arena.ChouseFigters();
+        arena.ChooseFigters();
         arena.Fight();
         arena.ShowWinner();
     }
@@ -27,7 +27,7 @@ class Arena
                                   new Demon("Demon", 100,2,20) };
     }
 
-    public void ChouseFigters()
+    public void ChooseFigters()
     {
         for (int i = 0; i < _heros.Count; i++)
         {
@@ -35,9 +35,12 @@ class Arena
             _heros[i].ShowStats();
         }
 
-        int quantityPersons = _heros.Count - 1;
-        _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)].Clone();
-        _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)].Clone();
+        int quantityPersonsWithoutOne = _heros.Count - 1;
+        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)]);
+        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)]);
+
+        // _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)].Clone();
+        // _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)].Clone();
     }
 
     public void Fight()
@@ -66,26 +69,15 @@ class Arena
 
 static class Utils
 {
-    public static int ReadInt(string text = "", int minValue = 0, int maxValue = 0)
+    public static int ReadInt(string text = "", int minValue = int.MinValue, int maxValue = int.MaxValue)
     {
-        int digitToOut = 0;
-        bool isRun = true;
+        int number;
+        Console.Write(text + " ");
 
-        while (isRun)
-        {
+        while (int.TryParse(Console.ReadLine(), out number) == false || number > maxValue || number < minValue)
             Console.Write(text + " ");
-            string digitFromConsole = Console.ReadLine();
 
-            if (int.TryParse(digitFromConsole, out digitToOut))
-                isRun = false;
-
-            if (isRun == false && (digitToOut <= maxValue && digitToOut >= minValue))
-                isRun = false;
-            else
-                isRun = true;
-        }
-
-        return digitToOut;
+        return number;
     }
 
     public static int GenerateRandomNumber(int min, int max)
@@ -137,7 +129,10 @@ class Hero
 
     public virtual void TakeDamage(int damage)
     {
-        Health -= (damage - Armor);
+        int delta = damage - Armor;
+
+        if (delta > 0)
+            Health -= delta;
     }
 
     public virtual int GiveDamage()
