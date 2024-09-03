@@ -35,9 +35,9 @@ class Arena
             _heros[i].ShowStats();
         }
 
-        int quantityPersonsWithoutOne = _heros.Count - 1;
-        _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)].Clone();
-        _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)].Clone();
+        int lastIndex = _heros.Count - 1;
+        _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, lastIndex)].Clone();
+        _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, lastIndex)].Clone();
     }
 
     public void Fight()
@@ -66,6 +66,8 @@ class Arena
 
 static class Utils
 {
+    private static Random _random = new Random();
+
     public static int ReadInt(string text = "", int minValue = int.MinValue, int maxValue = int.MaxValue)
     {
         int number;
@@ -79,8 +81,7 @@ static class Utils
 
     public static int GenerateRandomNumber(int min, int max)
     {
-        Random random = new Random();
-        return random.Next(min, max);
+        return _random.Next(min, max);
     }
 }
 
@@ -113,7 +114,7 @@ class Hero
 
     public virtual void Attack(Hero enemy)
     {
-        enemy.TakeDamage(this.GiveDamage());
+        enemy.TakeDamage(GiveDamage());
     }
 
     public virtual void TakeDamage(int damage)
@@ -153,30 +154,30 @@ class Ork : Hero
 
 class Elf : Hero
 {
-    private int _dubleAttackNumber;
+    private int _numberOfdubleAttack;
     private int _countOfAttak;
 
     public Elf(string name, int health, int armor, int damage, int dubleAttackNumber = 3, int countOfAttak = 0)
         : base(name, health, armor, damage)
     {
-        _dubleAttackNumber = dubleAttackNumber;
+        _numberOfdubleAttack = dubleAttackNumber;
         _countOfAttak = countOfAttak;
     }
 
     public override Hero Clone()
     {
-        return new Elf(Name, Health, Armor, Damage, _dubleAttackNumber, _countOfAttak);
+        return new Elf(Name, Health, Armor, Damage, _numberOfdubleAttack, _countOfAttak);
     }
 
     public override void Attack(Hero enemy)
     {
-        enemy.TakeDamage(this.GiveDamage());
+        enemy.TakeDamage(GiveDamage());
         _countOfAttak++;
 
-        if (_countOfAttak >= _dubleAttackNumber)
+        if (_countOfAttak >= _numberOfdubleAttack)
         {
             _countOfAttak = 0;
-            enemy.TakeDamage(this.GiveDamage());
+            enemy.TakeDamage(GiveDamage());
             Console.WriteLine("DubleAttack");
         }
     }
