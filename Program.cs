@@ -142,7 +142,7 @@ class Ork : Hero
 
     public override Hero Clone()
     {
-        return new Ork(Name, Health, Armor, Damage);
+        return new Ork(Name, Health, Armor, Damage, _ratio);
     }
 
     public override int GiveDamage()
@@ -165,7 +165,7 @@ class Elf : Hero
 
     public override Hero Clone()
     {
-        return new Elf(Name, Health, Armor, Damage);
+        return new Elf(Name, Health, Armor, Damage, _dubleAttackNumber, _countOfAttak);
     }
 
     public override void Attack(Hero enemy)
@@ -194,6 +194,11 @@ class Human : Hero
         _angry = angry;
         _angryMaxQuantity = angryMaxQuantity;
         _remedy = remedy;
+    }
+
+    public override Hero Clone()
+    {
+        return new Human(Name, Health, Armor, Damage, _angry, _angryMaxQuantity, _remedy);
     }
 
     public override void TakeDamage(int damage)
@@ -228,7 +233,7 @@ class Gnom : Hero
 
     public override Hero Clone()
     {
-        return new Gnom(Name, Health, Armor, Damage);
+        return new Gnom(Name, Health, Armor, Damage, _enhancedOfArmor, _mana, _antiMana, _ratio);
     }
 
     public override void TakeDamage(int damage)
@@ -259,7 +264,7 @@ class Demon : Hero
 
     public override Hero Clone()
     {
-        return new Demon(Name, Health, Armor, Damage);
+        return new Demon(Name, Health, Armor, Damage, _ratio);
     }
 
     public override void TakeDamage(int damage)
