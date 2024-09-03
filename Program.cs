@@ -36,12 +36,9 @@ class Arena
         }
 
         int quantityPersonsWithoutOne = _heros.Count - 1;
-        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)]);
-        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)]);
-
-        // _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)].Clone();
-        // _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)].Clone();
-    }
+        _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersonsWithoutOne)].Clone();
+        _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersonsWithoutOne)].Clone();
+   }
 
     public void Fight()
     {
@@ -102,19 +99,11 @@ class Hero
         Damage = damage;
     }
 
-    public Hero(Hero hero)// конструктор копирования
-    {
-        Name = hero.Name;
-        Health = hero.Health;
-        Armor = hero.Armor;
-        Damage = hero.Damage;
-    }
-
     public bool IsAlife => (Health > 0);
 
-    public Hero Clone()
+    public virtual Hero Clone()
     {
-        return (Hero)MemberwiseClone();
+        return new Hero(Name, Health, Armor, Damage);
     }
 
     public void ShowStats()
@@ -148,6 +137,11 @@ class Ork : Hero
     public Ork(string name, int health, int armor, int damage) : base(name, health, armor, damage)
     { }
 
+    public override Hero Clone()
+    {
+        return new Ork(Name, Health, Armor, Damage);
+    }
+
     public override int GiveDamage()
     {
         return Damage * Utils.GenerateRandomNumber(1, _ratio);
@@ -161,6 +155,11 @@ class Elf : Hero
 
     public Elf(string name, int health, int armor, int damage) : base(name, health, armor, damage)
     { }
+
+    public override Hero Clone()
+    {
+        return new Elf(Name, Health, Armor, Damage);
+    }
 
     public override void Attack(Hero enemy)
     {
@@ -209,6 +208,11 @@ class Gnom : Hero
     public Gnom(string name, int health, int armor, int damage) : base(name, health, armor, damage)
     { }
 
+    public override Hero Clone()
+    {
+        return new Gnom(Name, Health, Armor, Damage);
+    }
+
     public override void TakeDamage(int damage)
     {
         Health -= (damage - Armor);
@@ -231,6 +235,11 @@ class Demon : Hero
 
     public Demon(string name, int health, int armor, int damage) : base(name, health, armor, damage)
     { }
+
+    public override Hero Clone()
+    {
+        return new Demon(Name, Health, Armor, Damage);
+    }
 
     public override void TakeDamage(int damage)
     {
