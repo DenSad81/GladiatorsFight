@@ -36,8 +36,8 @@ class Arena
         }
 
         int quantityPersons = _heros.Count - 1;
-        _leftFighter = new Hero(_heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)]);
-        _rightFighter = new Hero(_heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)]);
+        _leftFighter = _heros[Utils.ReadInt("Choose left warrior: ", 0, quantityPersons)].Clone();
+        _rightFighter = _heros[Utils.ReadInt("Choose right warrior: ", 0, quantityPersons)].Clone();
     }
 
     public void Fight()
@@ -45,8 +45,8 @@ class Arena
         while (_leftFighter.IsAlife && _rightFighter.IsAlife)
         {
             Console.WriteLine();
-            _leftFighter.AcceptAttack(_rightFighter);
-            _rightFighter.AcceptAttack(_leftFighter);
+            _leftFighter.Attack(_rightFighter);
+            _rightFighter.Attack(_leftFighter);
             _leftFighter.ShowStats();
             _rightFighter.ShowStats();
             Console.WriteLine();
@@ -110,7 +110,7 @@ class Hero
         Damage = damage;
     }
 
-    public Hero(Hero hero)
+    public Hero(Hero hero)// конструктор копирования
     {
         Name = hero.Name;
         Health = hero.Health;
@@ -130,9 +130,9 @@ class Hero
         Console.WriteLine($"Name: {Name} Health: {Health} armor: {Armor} damage: {Damage}");
     }
 
-    public void AcceptAttack(Hero enemy)
+    public virtual void Attack(Hero enemy)
     {
-        this.TakeDamage(enemy.GiveDamage());
+        enemy.TakeDamage(this.GiveDamage());
     }
 
     public virtual void TakeDamage(int damage)
@@ -167,17 +167,17 @@ class Elf : Hero
     public Elf(string name, int health, int armor, int damage) : base(name, health, armor, damage)
     { }
 
-    public override int GiveDamage()
+    public override void Attack(Hero enemy)
     {
+        enemy.TakeDamage(this.GiveDamage());
         _countOfAttak++;
 
         if (_countOfAttak >= _dubleAttackNumber)
         {
             _countOfAttak = 0;
-            return Damage + base.GiveDamage();
+            enemy.TakeDamage(this.GiveDamage());
+            Console.WriteLine("DubleAttack");
         }
-
-        return Damage;
     }
 }
 
