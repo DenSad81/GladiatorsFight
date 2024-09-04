@@ -59,14 +59,14 @@ class Arena
             Console.WriteLine("Left fighter is win");
         else if (_rightFighter.IsAlife)
             Console.WriteLine("Right fighter is win");
-        else if (_leftFighter.IsAlife == false && _rightFighter.IsAlife == false)
+        else
             Console.WriteLine("Both dead");
     }
 }
 
 static class Utils
 {
-    private static Random _random = new Random();
+    private static Random s_random = new Random();
 
     public static int ReadInt(string text = "", int minValue = int.MinValue, int maxValue = int.MaxValue)
     {
@@ -81,7 +81,7 @@ static class Utils
 
     public static int GenerateRandomNumber(int min, int max)
     {
-        return _random.Next(min, max);
+        return s_random.Next(min, max);
     }
 }
 
@@ -154,19 +154,19 @@ class Ork : Hero
 
 class Elf : Hero
 {
-    private int _numberOfdubleAttack;
+    private int _dubleAttackNumber;
     private int _countOfAttak;
 
     public Elf(string name, int health, int armor, int damage, int dubleAttackNumber = 3, int countOfAttak = 0)
         : base(name, health, armor, damage)
     {
-        _numberOfdubleAttack = dubleAttackNumber;
+        _dubleAttackNumber = dubleAttackNumber;
         _countOfAttak = countOfAttak;
     }
 
     public override Hero Clone()
     {
-        return new Elf(Name, Health, Armor, Damage, _numberOfdubleAttack, _countOfAttak);
+        return new Elf(Name, Health, Armor, Damage, _dubleAttackNumber, _countOfAttak);
     }
 
     public override void Attack(Hero enemy)
@@ -174,7 +174,7 @@ class Elf : Hero
         enemy.TakeDamage(GiveDamage());
         _countOfAttak++;
 
-        if (_countOfAttak >= _numberOfdubleAttack)
+        if (_countOfAttak >= _dubleAttackNumber)
         {
             _countOfAttak = 0;
             enemy.TakeDamage(GiveDamage());
