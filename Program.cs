@@ -125,7 +125,7 @@ class Hero
             Health -= delta;
     }
 
-    public virtual int GiveDamage()
+    protected virtual int GiveDamage()
     {
         return Damage;
     }
@@ -146,7 +146,7 @@ class Ork : Hero
         return new Ork(Name, Health, Armor, Damage, _ratio);
     }
 
-    public override int GiveDamage()
+    protected override int GiveDamage()
     {
         return Damage * Utils.GenerateRandomNumber(1, _ratio);
     }
@@ -244,7 +244,7 @@ class Gnom : Hero
         _mana -= _antiMana;
     }
 
-    public override int GiveDamage()
+    protected override int GiveDamage()
     {
         if (_mana > 0)
             return Damage * _ratio;
